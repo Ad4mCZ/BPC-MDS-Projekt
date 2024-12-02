@@ -25,7 +25,8 @@ $.ajax({
     files.forEach((file) => {
       const card = generateCard(file, file);
       container.appendChild(card);
-      const modal = generateModal(file, "strem");
+
+      const modal = generateModal(file, "stream", file);
       container.appendChild(modal);
     });
   },
@@ -49,7 +50,7 @@ function generateCard(imageSrc, textSrc) {
   link.textContent = "Open Stream";
   link.setAttribute("type", "button");
   link.setAttribute("data-bs-toggle", "modal");
-  link.setAttribute("data-bs-target", "#exampleModal");
+  link.setAttribute("data-bs-target", "#" + textSrc);
 
   const text = document.createElement("p");
   text.className = "card-text";
@@ -63,11 +64,11 @@ function generateCard(imageSrc, textSrc) {
   return card;
 }
 
-function generateModal(textSrc, streamSrc) {
+function generateModal(textSrc, streamSrc, imgSrc) {
   // Create the modal container div
   const modal = document.createElement("div");
   modal.className = "modal fade";
-  modal.id = "exampleModal";
+  modal.id = textSrc;
   modal.tabIndex = "-1";
   modal.setAttribute("aria-labelledby", "exampleModalLabel");
   modal.setAttribute("aria-hidden", "true");
@@ -113,7 +114,7 @@ function generateModal(textSrc, streamSrc) {
   video.preload = "auto";
   video.width = 426;
   video.height = 240;
-  video.poster = "MY_VIDEO_POSTER.jpg";
+  video.poster = imgSrc;
   video.setAttribute("data-setup", "{}");
 
   // Create the  <source> element
