@@ -5,32 +5,29 @@ const files = [];
 var dir = "/media";
 var fileextension = ".png";
 
-$.ajax({
-  //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-  url: dir,
-  success: function (data) {
-    // List all png file names in the page
-    $(data)
-      //find ahref elements
-      .find("a:contains(" + fileextension + ")")
-      //strip the url and keep just the filename
-      .each(function () {
-        var filename = this.href
-          .replace(window.location.host, "")
-          .replace("http:///", "");
-        //append the array
-        files.push(filename);
-      });
-    //generate cards using the data in the array
-    files.forEach((file) => {
-      const card = generateCard(file, file);
-      container.appendChild(card);
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "/media", true);
+xhr.responseType = "document";
+xhr.onload = () => {
+  if (xhr.status === 200) {
+    var elements = xhr.response.getElementsByTagName("a");
+    for (x of elements) {
+      if (x.href.match(/\.(jpe?g|png|gif)$/)) {
+        const fileName = x.href.match(/[^/]+(?=\.[^/]+$)/).toString();
+        const card = generateCard(x.href, fileName);
+        container.appendChild(card);
+        const modal = generateModal(fileName, "stream", x.href);
+        container.appendChild(modal);
 
-      const modal = generateModal(file, "stream", file);
-      container.appendChild(modal);
-    });
-  },
-});
+        var player = videojs.getPlayer(fileName);
+      }
+    }
+  } else {
+    alert("Request failed. Returned status of " + xhr.status);
+  }
+};
+xhr.send();
+
 
 function generateCard(imageSrc, textSrc) {
   const card = document.createElement("div");
@@ -117,10 +114,12 @@ function generateModal(textSrc, streamSrc, imgSrc) {
   video.poster = imgSrc;
   video.setAttribute("data-setup", "{}");
 
+
+
   // Create the  <source> element
   const sourceMp4 = document.createElement("source");
-  sourceMp4.src = "MY_VIDEO.mp4";
-  sourceMp4.type = "video/mp4";
+  sourceMp4.src = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8";
+  sourceMp4.type = "application/x-mpegURL";
 
   // Create the fallback <p> element
   const fallbackText = document.createElement("p");
@@ -145,15 +144,8 @@ function generateModal(textSrc, streamSrc, imgSrc) {
   closeFooterButton.setAttribute("data-bs-dismiss", "modal");
   closeFooterButton.textContent = "Close";
 
-  // Add the Save changes button to the footer
-  const saveChangesButton = document.createElement("button");
-  saveChangesButton.type = "button";
-  saveChangesButton.className = "btn btn-primary";
-  saveChangesButton.textContent = "Save changes";
-
   // Append buttons to modal-footer
   modalFooter.appendChild(closeFooterButton);
-  modalFooter.appendChild(saveChangesButton);
 
   // Assemble the modal structure
   modalContent.appendChild(modalHeader);
