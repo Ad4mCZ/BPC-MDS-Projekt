@@ -28,7 +28,7 @@ Upravte `/etc/nginx/nginx.conf`, dle připraveného souboru `nginx.conf`.
 
 Do adresáře `/usr/share/nginx/html` vložte `index.html` a `generateCards.js`.
 
-Musí existovat adresář `/opt/mds/stream_inputs` se soubory `sample1.mp4`, `sample2.mp4`,..., `sample4.mp4`, ze kterých se budou generovat streamy.
+Musí existovat adresář `/opt/mds/stream_inputs` se soubory `sample1.mp4`, `sample2.mp4`,`sample3.mp4`, `sample4.mp4`, ze kterých se budou generovat streamy.
 
 2. **Spuštění kontrolního skriptu**
 
