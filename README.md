@@ -35,7 +35,7 @@ Spusťte soubor `key_checker3.py`. Tento skript bude naslouchat změnám v syst�
 
 3. **Vytvoření zdrojového streamu**
 
-Spusťte OBS (Open Broadcaster Software) nebo soubor `creator.py`. Tento krok zahájí tvorbu HLS streamů.
+Spusťte OBS (Open Broadcaster Software) nebo soubor `creator.py`. Tento krok detekuje změnu a provede autorizaci a případně spustí hls streamy.
 
 4. **Nastavení v OBS**
 Při vytváření streamu si vyberete jaký z nabízených možností si přejete zobrazovat. Možnosti jsou mezi Řečník (stream zobrazuje pouze kameru přednášejícího) Řečník+slidy (vaše kamera se nachází v pravém dolním rohu a hlavní zaměření streamu je přenášené slidy) s Slidy (tento stream přenáší pouze Vámi požadované streamy bez vaší kamery).
