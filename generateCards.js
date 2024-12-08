@@ -2,24 +2,23 @@ const container = document.getElementById("cards");
 
 const files = [];
 
-var dir = "/media";
-var fileextension = ".png";
 
 var xhr = new XMLHttpRequest();
-xhr.open("GET", "/media", true);
+xhr.open("GET", "/thumbnails", true);
 xhr.responseType = "document";
 xhr.onload = () => {
   if (xhr.status === 200) {
     var elements = xhr.response.getElementsByTagName("a");
     for (x of elements) {
-      if (x.href.match(/\.(jpe?g|png|gif)$/)) {
+      if (x.href.match(/_thumbnail001\.jpg$/)) {
         const fileName = x.href.match(/[^/]+(?=\.[^/]+$)/).toString();
         const card = generateCard(x.href, fileName);
         container.appendChild(card);
-        const modal = generateModal(fileName, "stream", x.href);
+        const modal = generateModal(fileName, fileName, x.href);
         container.appendChild(modal);
 
-        var player = videojs.getPlayer(fileName);
+// videojs(fileName);
+
       }
     }
   } else {
@@ -27,7 +26,6 @@ xhr.onload = () => {
   }
 };
 xhr.send();
-
 
 function generateCard(imageSrc, textSrc) {
   const card = document.createElement("div");
@@ -51,8 +49,7 @@ function generateCard(imageSrc, textSrc) {
 
   const text = document.createElement("p");
   text.className = "card-text";
-  text.textContent = textSrc;
-
+  text.textContent = textSrc.replace(/_thumbnail001/g, "");
   cardBody.appendChild(text);
   cardBody.appendChild(link);
   card.appendChild(img);
@@ -105,7 +102,7 @@ function generateModal(textSrc, streamSrc, imgSrc) {
 
   // Create the <video> element
   const video = document.createElement("video");
-  video.id = "my-video";
+  video.id = textSrc;
   video.className = "video-js";
   video.controls = true;
   video.preload = "auto";
@@ -114,11 +111,9 @@ function generateModal(textSrc, streamSrc, imgSrc) {
   video.poster = imgSrc;
   video.setAttribute("data-setup", "{}");
 
-
-
   // Create the  <source> element
   const sourceMp4 = document.createElement("source");
-  sourceMp4.src = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8";
+  sourceMp4.src = "http://localhost/streams/" + streamSrc.replace(/_thumbnail001/g, ".m3u8");
   sourceMp4.type = "application/x-mpegURL";
 
   // Create the fallback <p> element
@@ -144,8 +139,15 @@ function generateModal(textSrc, streamSrc, imgSrc) {
   closeFooterButton.setAttribute("data-bs-dismiss", "modal");
   closeFooterButton.textContent = "Close";
 
+  // Add the download changes button to the footer
+  const downloadChangeButton = document.createElement("button");
+  downloadChangeButton.type = "button";
+  downloadChangeButton.className = "btn btn-primary";
+  downloadChangeButton.textContent = "Download stream";
+
   // Append buttons to modal-footer
   modalFooter.appendChild(closeFooterButton);
+  modalFooter.appendChild(downloadChangeButton);
 
   // Assemble the modal structure
   modalContent.appendChild(modalHeader);
@@ -156,4 +158,17 @@ function generateModal(textSrc, streamSrc, imgSrc) {
 
   // Append the modal to the body
   return modal;
+}
+
+setTimeout(getVideos,5000 );
+
+
+
+function getVideos(){
+  console.log("hi");
+  const videoElements = document.querySelectorAll('video');
+  videoElements.forEach(video => {
+    console.log(video.id || 'No ID');
+videojs(video, {liveui: true});
+  });
 }
