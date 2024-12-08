@@ -31,7 +31,7 @@ Do adresáře `/usr/share/nginx/html` vložte `index.html` a `generateCards.js`.
 
 2. **Spuštění kontrolního skriptu**
 
-Spusťte soubor key_checker3.py. Tento skript bude naslouchat změnám v systému a zajišťovat, že každá změna bude registrována.
+Spusťte soubor `key_checker3.py`. Tento skript bude naslouchat změnám v systému a zajišťovat, že každá změna bude registrována.
 
 3. **Vytvoření zdrojového streamu**
 
